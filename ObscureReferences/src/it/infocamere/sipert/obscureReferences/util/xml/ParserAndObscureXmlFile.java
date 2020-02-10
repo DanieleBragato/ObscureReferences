@@ -28,7 +28,7 @@ import it.infocamere.sipert.obscureReferences.db.dto.GenericResultsDTO;
 import it.infocamere.sipert.obscureReferences.main.Main;
 import it.infocamere.sipert.obscureReferences.util.Constants;
 
-public class ParserXmlFile {
+public class ParserAndObscureXmlFile {
 
 	GenericResultsDTO peanaiUpdRisultatiDTO;
 	GenericResultsDTO sigetatRisultatiDTO;

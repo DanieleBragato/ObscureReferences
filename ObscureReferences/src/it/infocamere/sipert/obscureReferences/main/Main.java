@@ -1,7 +1,9 @@
 package it.infocamere.sipert.obscureReferences.main;
 
+import java.io.InputStream;
 import java.net.URL;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -11,7 +13,8 @@ import it.infocamere.sipert.obscureReferences.db.dto.GenericResultsDTO;
 import it.infocamere.sipert.obscureReferences.db.dto.SchemaDTO;
 import it.infocamere.sipert.obscureReferences.model.Model;
 import it.infocamere.sipert.obscureReferences.util.io.DirectoryList;
-import it.infocamere.sipert.obscureReferences.util.xml.ParserXmlFile;
+import it.infocamere.sipert.obscureReferences.util.xml.ParseXmlForSetLogFileName;
+import it.infocamere.sipert.obscureReferences.util.xml.ParserAndObscureXmlFile;
 
 public class Main {
 
@@ -21,48 +24,24 @@ public class Main {
 	private static String AnnoMeseMensil;
 	private static String percorsoInputFiles;
 	private static String percorsoOutputFiles;
+	private static String logFile;
 
 	private static Logger log;
 
 	public static void main(String[] args) {
 
-		// load configuration File in XML format for logging (log4j)
-		URL url = Main.class.getResource("/Log4j.xml");
-		DOMConfigurator.configure(url);
-
-		log = Logger.getLogger(Main.class);
-		log.info("Inizio elaborazione");
-
 		if (args != null && args.length > 0) {
-			log.info("Elenco dei parametri di elaborazione:");
 			for (int i = 0; i < args.length; i++) {
-				if (i == 0) {
-					log.info("   Parametro nr 1 - Nome utente Oracle = " + args[i].toString());
-					nomeUtenteOracle = args[i].toString();
-				}
-				if (i == 1) {
-					log.info("   Parametro nr 2 - Password utente Oracle = " + args[i].toString());
-					passwordUtenteOracle = args[i].toString();
-				}
-				if (i == 2) {
-					log.info("   Parametro nr 3 - Codice azienda = " + args[i].toString());
-					codiceAzienda = args[i].toString();
-				}
-				if (i == 3) {
-					log.info("   Parametro nr 4 - Anno (SSAA) mese (MM) e mensilità (MS) in elaborazione (formato SSAA_MM_MS) = " + args[i].toString());
-					AnnoMeseMensil = args[i].toString();
-				}
-				if (i == 4) {
-					log.info("   Parametro nr 5 - Percorso dei files xml da trattare = " + args[i].toString());
-					percorsoInputFiles = args[i].toString();
-				}
-				if (i == 5) {
-					log.info("   Parametro nr 6 - Percorso di output = " + args[i].toString());
-					percorsoOutputFiles = args[i].toString();
-				}
+				if (i == 0) nomeUtenteOracle = args[i].toString();
+				if (i == 1) passwordUtenteOracle = args[i].toString();
+				if (i == 2) codiceAzienda = args[i].toString();
+				if (i == 3) AnnoMeseMensil = args[i].toString();
+				if (i == 4) percorsoInputFiles = args[i].toString();
+				if (i == 5) percorsoOutputFiles = args[i].toString();
+				if (i == 6) logFile = args[i].toString();
 			}
 		} else {
-			log.error("ERRORE: Non ci sono PARAMETRI DI INPUT !!");
+			System.out.println("ERRORE: Non ci sono PARAMETRI DI INPUT !!");
 		}
 
 		if ((nomeUtenteOracle == null || (nomeUtenteOracle != null && nomeUtenteOracle.length() < 1))
@@ -70,12 +49,34 @@ public class Main {
 				|| (codiceAzienda == null || (codiceAzienda != null && codiceAzienda.length() < 1))
 				|| (AnnoMeseMensil == null || (AnnoMeseMensil != null && AnnoMeseMensil.length() < 1))
 				|| (percorsoInputFiles == null || (percorsoInputFiles != null && percorsoInputFiles.length() < 1))
-				|| (percorsoOutputFiles == null || (percorsoOutputFiles != null && percorsoOutputFiles.length() < 1))) {
-			log.error("ERRORE: Parametri in input Non completi/valorizzati !!");
-			log.error("Elaborazione Conclusa con Errori: EXIT !! ");
+				|| (percorsoOutputFiles == null || (percorsoOutputFiles != null && percorsoOutputFiles.length() < 1))
+				|| (logFile == null || (logFile != null && logFile.length() < 1))) {
+			System.out.println("ERRORE: Parametri in input Non completi/valorizzati !!");
+			System.out.println("Elaborazione Conclusa con Errori: EXIT !! ");
 			return;
 		}
 
+		// load configuration File in XML format for logging (log4j)
+		URL url = Main.class.getResource("/Log4j.xml");
+		if (logFile != null && logFile.length() > 0) {
+			// setup nome file dei log da parametro di input
+			ParseXmlForSetLogFileName parseXmlForSetLogFileName = new ParseXmlForSetLogFileName();
+			InputStream is = parseXmlForSetLogFileName.setLogFileName(logFile, url);
+			DOMConfigurator configurator = new DOMConfigurator();
+			configurator.doConfigure(is, LogManager.getLoggerRepository());			
+		}
+
+		log = Logger.getLogger(Main.class);
+		log.info("Inizio elaborazione");
+		log.info("Elenco dei parametri di elaborazione:");
+		log.info("   Parametro nr 1 - Nome utente Oracle = " + nomeUtenteOracle);
+		log.info("   Parametro nr 2 - Password utente Oracle = " + passwordUtenteOracle);
+		log.info("   Parametro nr 3 - Codice azienda = " + codiceAzienda);
+		log.info("   Parametro nr 4 - Anno (SSAA) mese (MM) e mensilità (MS) in elaborazione (formato SSAA_MM_MS) = " + AnnoMeseMensil);
+		log.info("   Parametro nr 5 - Percorso dei files xml da trattare = " + percorsoInputFiles);
+		log.info("   Parametro nr 6 - Percorso di output = " + percorsoOutputFiles);
+		log.info("   Parametro nr 7 - log file = " + logFile);
+		
 		Model model = new Model();
 
 		if (!model.testConnessioneDB(getSchemaDataBase())) {
@@ -120,7 +121,7 @@ public class Main {
 			if (filesDiInput != null && filesDiInput.length > 0) {
 				for (String fileName : filesDiInput) {
 					if (nomeFileCorretto(fileName)) {
-						ParserXmlFile parseXml = new ParserXmlFile();
+						ParserAndObscureXmlFile parseXml = new ParserAndObscureXmlFile();
 						if (parseXml.tryObscureReferencesOnFile(percorsoInputFiles + "\\" + fileName, fileName,
 								percorsoOutputFiles, sigetatRisultatiDTO, peanaiUpdRisultatiDTO))
 							countTotFilesOscurati++;
