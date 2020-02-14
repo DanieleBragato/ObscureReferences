@@ -21,7 +21,7 @@ public class GenericDAO {
 		SchemaDTO schemaDB = schemDTO;
 		
 		try {
-			Connection conn = DBConnect.getConnection(schemaDB);
+			Connection conn = DBConnect.getConnectionByHost(schemaDB);
 			conn.close();
 			return true;
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class GenericDAO {
 		ResultSet rs = null;
 		
 		try {
-			conn = DBConnect.getConnection(schemaDB);
+			conn = DBConnect.getConnectionByHost(schemaDB);
 			preparedStatement = conn.prepareStatement(queryDB);
 
 			rs = preparedStatement.executeQuery();

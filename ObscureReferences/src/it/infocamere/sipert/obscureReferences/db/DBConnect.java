@@ -10,7 +10,7 @@ public class DBConnect {
 	
 	static private final String jdbcUrlFirstBlock = "jdbc:oracle:thin:@//";
 
-	public static Connection getConnection(SchemaDTO schema) {
+	public static Connection getConnectionByHost(SchemaDTO schema) {
 		
 		String url = jdbcUrlFirstBlock + schema.getHostServerURL() + ":" + schema.getPort() + "/" + schema.getDbName();
 		
@@ -28,4 +28,22 @@ public class DBConnect {
 		
 	}
 
+	public static Connection getConnectionByTNS(SchemaDTO schema) {
+		
+		String url = jdbcUrlFirstBlock + schema.getHostServerURL() + ":" + schema.getPort() + "/" + schema.getDbName();
+		
+        String username = schema.getSchemaUserName();
+        String password = schema.getPassword();
+
+        try {
+        	
+        	return DriverManager.getConnection(url, username, password);
+        	
+        } catch (SQLException e) {
+			//e.printStackTrace();
+			throw new RuntimeException("SCHEMA " + schema.getSchemaUserName() + " " + e.toString());
+        }
+		
+	}	
+	
 }
