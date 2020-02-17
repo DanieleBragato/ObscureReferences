@@ -25,6 +25,7 @@ public class Main {
 	private static String percorsoInputFiles;
 	private static String percorsoOutputFiles;
 	private static String logFile;
+	private static String IdConnessione;
 
 	private static Logger log;
 
@@ -39,6 +40,7 @@ public class Main {
 				if (i == 4) percorsoInputFiles = args[i].toString();
 				if (i == 5) percorsoOutputFiles = args[i].toString();
 				if (i == 6) logFile = args[i].toString();
+				if (i == 7) IdConnessione = args[i].toString();
 			}
 		} else {
 			System.out.println("ERRORE: Non ci sono PARAMETRI DI INPUT !!");
@@ -50,7 +52,8 @@ public class Main {
 				|| (AnnoMeseMensil == null || (AnnoMeseMensil != null && AnnoMeseMensil.length() < 1))
 				|| (percorsoInputFiles == null || (percorsoInputFiles != null && percorsoInputFiles.length() < 1))
 				|| (percorsoOutputFiles == null || (percorsoOutputFiles != null && percorsoOutputFiles.length() < 1))
-				|| (logFile == null || (logFile != null && logFile.length() < 1))) {
+				|| (logFile == null || (logFile != null && logFile.length() < 1))
+				|| (IdConnessione == null || (IdConnessione != null && IdConnessione.length() < 1))) {
 			System.out.println("ERRORE: Parametri in input Non completi/valorizzati !!");
 			System.out.println("Elaborazione Conclusa con Errori: EXIT !! ");
 			return;
@@ -76,14 +79,21 @@ public class Main {
 		log.info("   Parametro nr 5 - Percorso dei files xml da trattare = " + percorsoInputFiles);
 		log.info("   Parametro nr 6 - Percorso di output = " + percorsoOutputFiles);
 		log.info("   Parametro nr 7 - log file = " + logFile);
+		log.info("   Parametro nr 8 - IdConnessione = " + IdConnessione);
 		
 		Model model = new Model();
 
-		if (!model.testConnessioneDB(getSchemaDataBase())) {
-			log.error("ERRORE: Test di connessione al data base NON COMPLETATO CORRETTAMENTE !! ");
+//		if (!model.testConnessioneDB(getSchemaDataBase())) {
+//			log.error("ERRORE: Test di connessione al data base NON COMPLETATO CORRETTAMENTE !! ");
+//			log.error("Elaborazione Conclusa con Errori: EXIT !! ");
+//			return;
+//		}
+		
+		if (!model.testConnessioneDBbyTNS(getSchemaDataBase())) {
+			log.error("ERRORE: Test di connessione al data base con TNS NON COMPLETATO CORRETTAMENTE !! ");
 			log.error("Elaborazione Conclusa con Errori: EXIT !! ");
 			return;
-		}
+		}		
 
 		GenericResultsDTO peanaiUpdRisultatiDTO;
 		PeanaiUpdDAO peanaiUpdDAO = new PeanaiUpdDAO();
@@ -167,9 +177,10 @@ public class Main {
 
 		schemaDTO.setSchemaUserName(nomeUtenteOracle);
 		schemaDTO.setPassword(passwordUtenteOracle);
-		schemaDTO.setDbName("ORAXAP");
-		schemaDTO.setPort("1523");
-		schemaDTO.setHostServerURL("lxidbpena01.intra.infocamere.it");
+//		schemaDTO.setDbName("ORAXAP");
+//		schemaDTO.setPort("1523");
+//		schemaDTO.setHostServerURL("lxidbpena01.intra.infocamere.it");
+		schemaDTO.setIdConnessione(IdConnessione);
 		return schemaDTO;
 
 	}

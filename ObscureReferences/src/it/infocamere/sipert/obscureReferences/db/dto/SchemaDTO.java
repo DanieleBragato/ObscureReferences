@@ -12,10 +12,12 @@ public class SchemaDTO {
 	private String port;
     
 	private String hostServerURL;
+	
+	private String IdConnessione;	
 
 	
 	public SchemaDTO(String schemaUserName, String password, String schemaAdUserName, String passwordAd, String dbName,
-			String port, String hostServerURL) {
+			String port, String hostServerURL , String IdConnessione) {
 		super();
 		this.schemaUserName = schemaUserName;
 		this.password = password;
@@ -24,6 +26,7 @@ public class SchemaDTO {
 		this.dbName = dbName;
 		this.port = port;
 		this.hostServerURL = hostServerURL;
+		this.IdConnessione = IdConnessione;
 	}
 
 	public SchemaDTO() {
@@ -85,6 +88,14 @@ public class SchemaDTO {
 	public void setHostServerURL(String hostServerURL) {
 		this.hostServerURL = hostServerURL;
 	}
+	
+	public String getIdConnessione() {
+		return IdConnessione;
+	}
+
+	public void setIdConnessione(String idConnessione) {
+		IdConnessione = idConnessione;
+	}
 
 	@Override
 	public int hashCode() {
@@ -115,7 +126,7 @@ public class SchemaDTO {
 	public String toString() {
 		return "SchemaDTO [schemaUserName=" + schemaUserName + ", password=" + password + ", schemaAdUserName="
 				+ schemaAdUserName + ", passwordAd=" + passwordAd + ", dbName=" + dbName + ", port=" + port
-				+ ", hostServerURL=" + hostServerURL + "]";
+				+ ", hostServerURL=" + hostServerURL + ", IdConnessione=" + IdConnessione + "]";
 	}	
 	
 	

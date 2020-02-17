@@ -30,6 +30,21 @@ public class GenericDAO {
 			throw new RuntimeException("Errore nella connessione", e);
 		}
 	}
+
+	public boolean testConnessioneOKbyTNS (SchemaDTO schemDTO) {
+		
+		SchemaDTO schemaDB = schemDTO;
+		
+		try {
+			Connection conn = DBConnect.getConnectionByTNS(schemaDB);
+			conn.close();
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException("Errore nella connessione", e);
+		}
+	}	
 	
 	public GenericResultsDTO executeQuery(SchemaDTO schemDTO, String queryDB) {
 		
@@ -44,7 +59,7 @@ public class GenericDAO {
 		ResultSet rs = null;
 		
 		try {
-			conn = DBConnect.getConnectionByHost(schemaDB);
+			conn = DBConnect.getConnectionByTNS(schemaDB);
 			preparedStatement = conn.prepareStatement(queryDB);
 
 			rs = preparedStatement.executeQuery();

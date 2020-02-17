@@ -31,6 +31,14 @@ public class Model {
 		
 	}
 	
+	public boolean testConnessioneDBbyTNS(SchemaDTO schemaDB) {
+		
+		GenericDAO genericDAO = new GenericDAO();
+		
+		return genericDAO.testConnessioneOKbyTNS(schemaDB);
+		
+	}	
+	
 	public GenericResultsDTO runQuery(SchemaDTO schema, String queryDB) {
 		
 		GenericResultsDTO risultati = null;
