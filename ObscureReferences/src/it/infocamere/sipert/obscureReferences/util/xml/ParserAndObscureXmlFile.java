@@ -178,7 +178,7 @@ public class ParserAndObscureXmlFile {
 
 	private void newFileWithObscureReferencesFromXml(Document document) {
 
-		pathCompletoFileDiOutput = pathFileDiOutput  + "\\" + fileNameInput.replace(codDipendente , nuovoCodDipendente);
+		pathCompletoFileDiOutput = pathFileDiOutput  + File.separator + fileNameInput.replace(codDipendente , nuovoCodDipendente);
 		
 		try {
 			// scrittura del contenuto su un file xml

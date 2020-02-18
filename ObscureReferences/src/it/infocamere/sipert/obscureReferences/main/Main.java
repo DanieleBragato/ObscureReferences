@@ -1,5 +1,6 @@
 package it.infocamere.sipert.obscureReferences.main;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -132,7 +133,7 @@ public class Main {
 				for (String fileName : filesDiInput) {
 					if (nomeFileCorretto(fileName)) {
 						ParserAndObscureXmlFile parseXml = new ParserAndObscureXmlFile();
-						if (parseXml.tryObscureReferencesOnFile(percorsoInputFiles + "\\" + fileName, fileName,
+						if (parseXml.tryObscureReferencesOnFile(percorsoInputFiles + File.separator + fileName, fileName,
 								percorsoOutputFiles, sigetatRisultatiDTO, peanaiUpdRisultatiDTO))
 							countTotFilesOscurati++;
 					}
