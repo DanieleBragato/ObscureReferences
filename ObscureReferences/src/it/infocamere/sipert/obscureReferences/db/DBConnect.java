@@ -72,7 +72,7 @@ public class DBConnect {
 		
 		if (host == null || (host != null && host.length() < 1) || (host != null && host.length() > 0 && hostIsKO(host))) {
     		log.warn("Impossibile accedere al data base tramite l'host name -> si procede tramite l'id connessione/tns");
-    		return getConnectionByTNS(username, password, tns_admin, schema.getIdConnessione(), serviceNane, schema.getSchemaUserName());
+    		return getConnectionByIdConnessione(username, password, tns_admin, schema.getIdConnessione(), serviceNane, schema.getSchemaUserName());
 		}
 		if (port == null || (port != null && port.length() < 1)) {
     		log.error("Impossibile accedere al data base: porta data base non trovato");
@@ -111,7 +111,7 @@ public class DBConnect {
 		return isKO;
 	}
 	
-	private static Connection getConnectionByTNS(String username, String password, String tns_admin, String idConnessione, String serviceNane, String schemaUserName) {
+	private static Connection getConnectionByIdConnessione(String username, String password, String tns_admin, String idConnessione, String serviceNane, String schemaUserName) {
 		
 		String url = jdbcUrlFirstBlockForTNS + idConnessione;
 		
