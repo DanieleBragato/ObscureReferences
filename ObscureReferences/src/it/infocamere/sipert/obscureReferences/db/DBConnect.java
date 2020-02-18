@@ -1,5 +1,6 @@
 package it.infocamere.sipert.obscureReferences.db;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -57,7 +58,7 @@ public class DBConnect {
         	return null;
         }
         
-		TnsNamesOra tnsOra = (new TnsOraParser(tns_admin + "\\tnsnames.ora")).parse();  
+		TnsNamesOra tnsOra = (new TnsOraParser(tns_admin + File.separator + "tnsnames.ora")).parse();  
 
 		List<Parameter> parameters = tnsOra.getServiceNames(schema.getIdConnessione());
 		
