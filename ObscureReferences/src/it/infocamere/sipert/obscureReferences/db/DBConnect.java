@@ -56,8 +56,6 @@ public class DBConnect {
         	log.error("Impossibile accedere al data base: parametri non presenti/completi");
         	return null;
         }
-	    
-        tns_admin = "D:\\SIPERT\\APPO";
         
 		TnsNamesOra tnsOra = (new TnsOraParser(tns_admin + "\\tnsnames.ora")).parse();  
 
